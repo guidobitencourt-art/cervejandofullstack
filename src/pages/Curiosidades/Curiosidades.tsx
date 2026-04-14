@@ -1,9 +1,9 @@
 
 
-import ImgMonjes from '../../assets/los monges.png'
-import ImgHistoria from '../../assets/historia ipa.png'
-import ImgPureza from '../../assets/pureza alema.png'
-import ImgBruxas from '../../assets/bruxas cerveja.png'
+const ImgMonjes = new URL('../../assets/los monges.png', import.meta.url).href
+const ImgHistoria = new URL('../../assets/historia ipa.png', import.meta.url).href
+const ImgPureza = new URL('../../assets/pureza alema.png', import.meta.url).href
+const ImgBruxas = new URL('../../assets/bruxas cerveja.png', import.meta.url).href
 
 const Curiosidades = () => {
     return (

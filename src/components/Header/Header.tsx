@@ -6,7 +6,7 @@ const Header = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="bg-[#FFF5D4] flex justify-between items-center py-3 md:py-6 px-6 relative">
+    <header className="bg-[#FFF5D4] flex justify-between items-center h-14 md:h-16 px-6 relative">
       <img src={Logo} alt="Cervejando logo" className="max-w-[9rem] md:max-w-[12.5rem] h-auto" />
 
       <button

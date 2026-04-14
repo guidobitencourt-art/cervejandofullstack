@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:api": "ts-node-dev --respawn --transpile-only src/server/index.ts",
+    "dev:api": "ts-node-dev --respawn --transpile-only --loader ts-node/esm src/server/index.ts",
     "dev:all": "concurrently \"npm:dev:api\" \"npm:dev\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
