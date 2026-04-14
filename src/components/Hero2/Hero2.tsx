@@ -2,6 +2,7 @@
 
 import ImgMonjes from '../../assets/los monges.png'
 import ImgHistoria from '../../assets/historia ipa.png'
+import { Link } from 'react-router-dom'
 
 const Hero2 = () => {
     return (
@@ -29,9 +30,9 @@ const Hero2 = () => {
             </div>
 
             <div className="mt-6 flex justify-center">
-                <a className="inline-block bg-[#caa120] hover:bg-[#b28f18] text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-colors" href="curiosidades.html" title="Descubrir">
+                <Link className="inline-block bg-[#caa120] hover:bg-[#b28f18] text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-colors" to="/curiosidades" title="Descubrir">
                     Descubrir
-                </a>
+                </Link>
             </div>
         </section>
     )

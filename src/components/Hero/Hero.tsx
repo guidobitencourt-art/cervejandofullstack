@@ -1,6 +1,7 @@
 
 
 import ImgEstilos from '../../assets/Estilos.webp'
+import { Link } from 'react-router-dom'
 
 const Hero = () => {
     return (
@@ -13,9 +14,9 @@ const Hero = () => {
                         <p className="text-gray-600 mb-6">
                             Aquí descubrirás lo único de cada estilo y aprenderás a elegir tu cerveza perfecta.
                         </p>
-                        <a className="inline-flex items-center justify-center gap-2 bg-[#caa120] hover:bg-[#b28f18] text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-colors mx-auto" href="estilos.html" title="Descubrir">
+                        <Link className="inline-flex items-center justify-center gap-2 bg-[#caa120] hover:bg-[#b28f18] text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-colors mx-auto" to="/estilos" title="Descubrir">
                             Descubrir
-                        </a>
+                        </Link>
                     </div>
                 </div>
 

@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from "./components/Header/Header"
-import Footer from "./components/Footer/Footer"
+import MainLayout from './layouts/MainLayout'
 import Banner from "./components/Banner/Banner"
 import Hero from "./components/Hero/Hero"
 import Hero2 from "./components/Hero2/Hero2"
 import Contact from "./components/Contact/Contact"
+import Contacto from "./pages/Contacto/Contacto"
 import EstilosPage from "./pages/Estilos/Estilos"
+import Curiosidades from "./pages/Curiosidades/Curiosidades"
 
 const Home = () => {
   return (
@@ -21,12 +22,14 @@ const Home = () => {
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/estilos" element={<EstilosPage />} />
+        <Route element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="estilos" element={<EstilosPage />} />
+          <Route path="curiosidades" element={<Curiosidades />} />
+          <Route path="contacto" element={<Contacto />} />
+        </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   )
 }

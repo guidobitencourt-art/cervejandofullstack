@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Logo from '../../assets/Logo.png'
 
 const Header = () => {
@@ -23,10 +24,10 @@ const Header = () => {
         className={`${open ? 'flex' : 'hidden'} md:flex ${open ? 'absolute top-full left-0 w-full bg-[#FFF5D4] flex-col items-center py-3 shadow-md' : ''} md:static md:top-auto md:left-auto md:w-auto md:bg-transparent md:flex-row md:items-center md:py-0 md:shadow-none`}
       >
         <ul className={`flex ${open ? 'flex-col gap-4' : 'flex-row gap-4'} md:flex-row md:gap-8 text-sm md:text-base`}>
-          <li><a className="font-bold hover:text-[#d4a017]" href="#">Inicio</a></li>
-          <li><a className="font-bold hover:text-[#d4a017]" href="estilos.html">Estilos</a></li>
-          <li><a className="font-bold hover:text-[#d4a017]" href="curiosidades.html">Curiosidades</a></li>
-          <li><a className="font-bold hover:text-[#d4a017]" href="contacto.html">Contacto</a></li>
+          <li><Link className="font-bold hover:text-[#d4a017]" to="/">Inicio</Link></li>
+          <li><Link className="font-bold hover:text-[#d4a017]" to="/estilos">Estilos</Link></li>
+          <li><Link className="font-bold hover:text-[#d4a017]" to="/curiosidades">Curiosidades</Link></li>
+          <li><Link className="font-bold hover:text-[#d4a017]" to="/contacto">Contacto</Link></li>
         </ul>
       </nav>
     </header>
