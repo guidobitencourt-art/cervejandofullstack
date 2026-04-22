@@ -22,10 +22,31 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier, password }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Login failed')
+      // parse JSON safely (some error responses or server errors may return empty body)
+      let data: any = null
+      const contentType = res.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        try {
+          data = await res.json()
+        } catch (err) {
+          // malformed or empty JSON
+          const text = await res.text().catch(() => '')
+          throw new Error(text || `Server returned status ${res.status}`)
+        }
+      } else {
+        // try to read as text for better error message
+        const text = await res.text().catch(() => '')
+        if (res.ok) {
+          // unexpected non-json success response
+          throw new Error('Login succeeded but response could not be parsed')
+        } else {
+          throw new Error(text || `Server returned status ${res.status}`)
+        }
+      }
+
+      if (!res.ok) throw new Error(data?.error || data?.message || 'Login failed')
       localStorage.setItem('token', data.token)
-      navigate('/')
+      navigate('/dashboard')
       window.location.reload()
     } catch (err: any) {
       setError(err.message || 'Error')

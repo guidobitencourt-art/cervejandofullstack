@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from './models/User';
 import { authMiddleware } from './middleware/auth';
+import authRouter from './routes/auth'
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -150,62 +151,8 @@ app.get("/api/cervezas", async (req: Request, res: Response) => {
 // Rutas de autenticación (registro / login)
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 
-app.post('/api/auth/register', async (req: Request, res: Response) => {
-  try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) return res.status(400).json({ error: 'Faltan campos' });
-    if (isDevNoDB) {
-      // En modo desarrollo sin DB no permitimos registrar usuarios reales.
-      return res.status(501).json({ error: 'Registro deshabilitado en modo desarrollo sin DB' });
-    }
-
-    await connectToMongo();
-
-    // comprobar usuario existente
-    const exists = await User.findOne({ $or: [{ username }, { email }] }).exec();
-    if (exists) return res.status(409).json({ error: 'Usuario o email ya existe' });
-
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-
-    const created = new User({ username, email, password: hashed });
-    await created.save();
-    const token = jwt.sign({ userId: created._id }, JWT_SECRET, { expiresIn: '1d' });
-    res.status(201).json({ token, user: { id: created._id, username: created.username, email: created.email } });
-  } catch (error) {
-    console.error('Error register:', error);
-    res.status(500).json({ error: 'Error al registrar', detail: error instanceof Error ? error.message : 'Error desconocido' });
-  }
-});
-
-app.post('/api/auth/login', async (req: Request, res: Response) => {
-  try {
-    const { identifier, password } = req.body; // identifier = username o email
-    if (!identifier || !password) return res.status(400).json({ error: 'Faltan campos' });
-    if (isDevNoDB) {
-      // Permitimos un usuario de desarrollo rápido: identifier='dev' password='devpass'
-      if (identifier === 'dev' && password === 'devpass') {
-        const token = jwt.sign({ userId: 'dev-user' }, JWT_SECRET, { expiresIn: '1d' });
-        return res.json({ token, user: { id: 'dev-user', username: 'dev', email: 'dev@example.local' } });
-      }
-      return res.status(401).json({ error: 'Credenciales inválidas (modo dev sin DB)' });
-    }
-
-    await connectToMongo();
-
-    const user = await User.findOne({ $or: [{ username: identifier }, { email: identifier }] }).exec();
-    if (!user) return res.status(401).json({ error: 'Credenciales inválidas' });
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ error: 'Credenciales inválidas' });
-
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token, user: { id: user._id, username: user.username, email: user.email } });
-  } catch (error) {
-    console.error('Error login:', error);
-    res.status(500).json({ error: 'Error al loguear', detail: error instanceof Error ? error.message : 'Error desconocido' });
-  }
-});
+// Mount auth router
+app.use('/api/auth', authRouter)
 
 // Ruta POST: Sirve para CREAR una nueva cerveza (PROTEGIDA)
 app.post("/api/cervezas", authMiddleware, async (req: Request, res: Response) => {

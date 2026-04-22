@@ -10,12 +10,21 @@ import Logo from '../../assets/Logo.png'
 const Header = () => {
   const [open, setOpen] = useState(false)
   const [token, setToken] = useState<string | null>(typeof window !== 'undefined' ? localStorage.getItem('token') : null)
+  const [username, setUsername] = useState<string | null>(null)
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     setToken(null)
     // refresh to update protected UI quickly
     window.location.reload()
+  }
+
+  // fetch username if token exists
+  if (typeof window !== 'undefined' && token && !username) {
+    fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && data.username) setUsername(data.username) })
+      .catch(() => {})
   }
 
   return (
@@ -44,9 +53,12 @@ const Header = () => {
             {!token ? (
               <li><Link className="font-bold hover:text-[#d4a017]" to="/login">Login</Link></li>
             ) : (
-              <li>
-                <button onClick={handleLogout} className="font-bold hover:text-[#d4a017] bg-transparent border-0 p-0">Cerrar sesión</button>
-              </li>
+              <>
+                <li className="font-semibold">{username ? `Hola, ${username}` : 'Usuario'}</li>
+                <li>
+                  <button onClick={handleLogout} className="font-bold hover:text-[#d4a017] bg-transparent border-0 p-0">Cerrar sesión</button>
+                </li>
+              </>
             )}
         </ul>
       </nav>
