@@ -10,10 +10,13 @@ export default defineConfig(({ mode }) => {
   const apiProxyTarget = env.VITE_API_PROXY_TARGET || 'https://cervejando-fullstack.vercel.app'
 
   return {
+    // Serve files from the repository root while keeping the Vite config inside `frontend/`.
+    root: path.resolve(__dirname, '..'),
     plugins: [react(), tailwindcss()],
     resolve: {
+      // Alias `@` to the root `src` so imports like `@/components/...` keep working.
       alias: {
-        '@': path.resolve(__dirname, 'src'),
+        '@': path.resolve(__dirname, '..', 'src'),
       },
     },
     server: {
